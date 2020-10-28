@@ -32,7 +32,8 @@ doubleEveryOther lst = zipWith (*) (cycle c) lst
 
 -- Exercise 3:
 sumDigits :: [Integer] -> Integer
-sumDigits x = foldr (+) 0 $ map f x
+--sumDigits x = foldr (+) 0 $ map f x
+sumDigits = foldr ((+) . f) 0
   where f x = x `div` 10 + x `mod` 10
 
 -- Exercise 4:
