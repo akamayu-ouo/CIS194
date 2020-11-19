@@ -11,7 +11,7 @@ import Data.List (sort)
 
 -- Exercise 1:
 glCons :: Employee -> GuestList -> GuestList
-glCons emp (GL lst fun) = GL (lst : emp) (fun + empFun emp)
+glCons emp (GL lst fun) = GL (emp : lst ) (fun + empFun emp)
 --glCons emp lst = (GL [emp] $ empFun emp) `mappend` lst
 
 instance Monoid GuestList where
@@ -23,22 +23,23 @@ moreFun  = max
 
 
 -- Exercise 2:
-treeFold :: (a -> [b] -> b) -> b -> Tree a -> b
-treeFold f ini (Node val lst) = f val $ map (treeFold f ini) lst
+treeFold :: (a -> [b] -> b) -> Tree a -> b
+treeFold f (Node val lst) = f val $ map (treeFold f) lst
 
 
 -- Exercise 3:
 nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
 nextLevel boss lst = (withBoss, noBoss)
-        where noBoss   = mconcat . map (uncurry moreFun) $ lst
-              withBoss = (glCons boss) . mconcat . map snd $ lst
+        where noBoss   = foldMap (uncurry moreFun) lst
+              withBoss = (glCons boss) . foldMap snd $ lst
+              -- foldMap = mconcat . fmap
               -- moncat = fold mappend mempty
               -- (uncurry f) a b = f (a, b)
 
 
 -- Exercise 4:
 maxFun :: Tree Employee -> GuestList
-maxFun = (uncurry moreFun) . treeFold nextLevel (mempty, mempty)
+maxFun = uncurry moreFun . treeFold nextLevel
 
 
 -- Exercise 5:
