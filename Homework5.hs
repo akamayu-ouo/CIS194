@@ -100,7 +100,7 @@ instance HasVars (M.Map String Integer -> Maybe Integer) where
 instance Expr (M.Map String Integer -> Maybe Integer) where
     --Numeral literial is just a constant function
     lit = const . Just -- \_ -> Just x
-    -- <$> applies a function on the content of a monad
-    -- <*> applies a function in monad on the content of a monad
+    -- <$> applies a function on the content of a functor
+    -- <*> applies a function in functor on the content of a1 functor
     add f g = \m -> (+) <$> (f m) <*> (g m)
     mul f g = \m -> (*) <$> (f m) <*> (g m)
